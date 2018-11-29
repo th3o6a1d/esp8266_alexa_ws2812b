@@ -16,8 +16,6 @@ void updateBikes() {
   client.println();
 
   String preJSON = "";
-
-
   while (client.connected()) {
     preJSON = client.readStringUntil('}');
     if (preJSON.indexOf("\"station_id\":\"422\"") > 0) {
@@ -33,43 +31,57 @@ void updateBikes() {
   JsonObject& root = jsonBuffer.parseObject(preJSON);
   const char* station_id = root["station_id"];
 
-  int bike_change = sqrt(sq((int) root["num_bikes_available"] - num_bikes_available));
+  int bikeChange = sqrt(sq((int) root["num_bikes_available"] - numBikesAvailable));
 
-  for (int x = 0; x < 10; x++) {
-    for (int i = num_bikes_available; i < num_bikes_available + bike_change; i++) {
-    strip.SetPixelColor(i, hslGreen);
-    }
-    strip.Show();
-    delay(1000);
-    for (int i = num_bikes_available; i < num_bikes_available + bike_change; i++) {
-    strip.SetPixelColor(i, hslBlack);
-    }
-    strip.Show();
-    delay(1000);
-  }
+  numBikesDisabled = root["num_bikes_disabled"];
 
-  
-  num_bikes_available = root["num_bikes_available"];
-  num_ebikes_available = root["num_ebikes_available"];
-  num_bikes_disabled = root["num_bikes_disabled"];
-  
-
-  Serial.println(num_bikes_available);
-  Serial.println(bike_change);
-
-  for (int ledIndex = 0; ledIndex < PixelCount; ledIndex ++) {
-    if ((ledIndex < num_bikes_available) && (ledIndex < 20)) {
-      strip.SetPixelColor(ledIndex, hslGreen);
+  for (int i = bikesStart; i < bikesFinish; i ++) {
+    if (i < bikesStart + numBikesDisabled) {
+      strip.SetPixelColor(i, hslRed);
     } else {
-      strip.SetPixelColor(ledIndex, hslBlack);
+      strip.SetPixelColor(i, hslBlack);
     }
   }
+
+  for (int x = 0; x < 3; x++) {
+    for (int i = bikesStart + numBikesDisabled + numBikesAvailable; i < bikesStart + numBikesDisabled + numBikesAvailable + bikeChange; i++) {
+      strip.SetPixelColor(i, hslGreen);
+    }
+    strip.Show();
+    delay(1000);
+    for (int i = bikesStart + numBikesDisabled + numBikesAvailable; i < bikesStart + numBikesDisabled + numBikesAvailable + bikeChange; i++) {
+      strip.SetPixelColor(i, hslBlack);
+    }
+    strip.Show();
+    delay(1000);
+  }
+
+  numBikesAvailable = root["num_bikes_available"];
+  numEBikesAvailable = root["num_ebikes_available"];
+  
+  strip.Show();
+
+  for (int i = bikesStart + numBikesDisabled; i < bikesFinish; i ++) {
+    if (i < bikesStart + numBikesDisabled + numBikesAvailable) {
+      strip.SetPixelColor(i, hslGreen);
+    } else {
+      strip.SetPixelColor(i, hslBlack);
+    }
+  }
+  for (int i = bikesStart + numBikesAvailable; i < bikesFinish; i ++) {
+    if (i < bikesStart + numBikesAvailable + numEBikesAvailable) {
+      strip.SetPixelColor(i, hslYellow);
+    } else {
+      strip.SetPixelColor(i, hslBlack);
+    }
+  }
+
   strip.Show();
 
 }
 
 
-void weather() {
+void updateWeather() {
   String url = "/data/2.5/forecast?q=New%20York&APPID=650e8d6761fa2927fb04ecaad3b6d7ef&mode=json&units=metric";
   WiFiClient client;
   client.connect("api.openweathermap.org", 80);
@@ -78,9 +90,7 @@ void weather() {
                "Connection: keep-alive\r\n\r\n");
   client.println();
 
-  expectRain = false;
   temperature = 0;
-
   int counter = 0;
   while (client.connected()) {
     counter += 1;
@@ -97,15 +107,17 @@ void weather() {
   client.stop();
 
   // Update LEDs
-  int tTotal = round(91 - temperature / 10);
-  for (int n = 80; n < tTotal; n ++) {
+  int tTotal = round(tempFinish - temperature / 10);
+  for (int n = tempStart; n < tTotal; n ++) {
     strip.SetPixelColor(n, hslBlue);
   }
-  for (int ledIndex = tTotal; ledIndex < 91; ledIndex++) {
-    strip.SetPixelColor(ledIndex, hslRed);
+  for (int i = tTotal; i < tempFinish; i++) {
+    strip.SetPixelColor(i, hslRed);
   }
   strip.Show();
 }
+
+
 
 
 

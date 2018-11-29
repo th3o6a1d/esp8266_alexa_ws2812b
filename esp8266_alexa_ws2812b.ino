@@ -8,7 +8,6 @@
 #include "settings.h"
 
 #define colorSaturation 1
-
 const uint16_t PixelCount = 118;
 const uint8_t PixelPin = 4;
 
@@ -19,73 +18,83 @@ RgbColor green(0, colorSaturation, 0);
 RgbColor blue(0, 0, colorSaturation);
 RgbColor white(colorSaturation);
 RgbColor black(0);
+RgbColor yellow(115, 119, 39);
 
 HslColor hslRed(red);
 HslColor hslGreen(green);
 HslColor hslBlue(blue);
 HslColor hslWhite(white);
+HslColor hslYellow(yellow);
 HslColor hslBlack(black);
 
-// LEDs
-int num_bikes_available = 0;
-int num_ebikes_available = 0;
-int num_bikes_disabled = 0;
-bool expectRain = false;
+// Bikes
+int bikesLastUpdated = 0;
+int bikesStart = 10;
+int bikesFinish = 61;
+int numBikesAvailable = 0;
+int numEBikesAvailable = 0;
+int numBikesDisabled = 0;
+
+// Temperature
+int tempStart = 80;
+int tempFinish = 90;
 float temperature = 0.0;
-unsigned long lastExecuted = 0;
-RgbColor ledArray[118];
+int weatherLastUpdated = 0;
+
+// Light effects
+int lastShimmered = 0;
+
 
 WiFiUDP UDP;
 IPAddress ipMulti(239, 255, 255, 250);
 ESP8266WebServer HTTP(80);
 boolean udpConnected = false;
-unsigned int portMulti = 1900;      // local port to listen on
-unsigned int localPort = 1900;      // local port to listen on
+unsigned int portMulti = 1900;      
+unsigned int localPort = 1900;      
 boolean wifiConnected = false;
 boolean relayState = false;
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; 
 String serial;
 String persistent_uuid;
 boolean cannotConnectToWifi = false;
 
-void prog() {
-  
-  updateBikes();
-  Serial.println("Did bikes");
-  weather();
-  Serial.println("Got weather");
-  strip.Show();
+void prog(bool startOver) {
 
-  for (int i = 0; i<PixelCount; i++){
-    ledArray[i] = strip.GetPixelColor(i);
+  if (startOver == true){
+    updateBikes();
+    bikesLastUpdated = millis();
+
+    updateWeather();
+    weatherLastUpdated = millis();
   }
+  
+  if ((millis() > bikesLastUpdated + 60000) && (relayState)) {
+    updateBikes();
+    bikesLastUpdated = millis();
+  }
+  
+  if ((millis() > weatherLastUpdated + 300000) && (relayState)) {
+    weather();
+    weatherLastUpdated = millis();
+  }
+  
 }
 
 
 void setup() {
   Serial.begin(115200);
-
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
-  
   strip.Begin();
   strip.Show();
-
-  initializeWiFi();
-  prog();
-
+  startNetworking();
+  prog(true);
 }
 
 void loop() {
-
-  if ((millis() > lastExecuted + 60000) && (relayState)) {
-    prog();
-    lastExecuted = millis();
-  }
-
+  prog(false);
   HTTP.handleClient();
   runServer();
-
 }
+
+
 
 

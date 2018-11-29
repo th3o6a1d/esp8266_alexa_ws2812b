@@ -14,7 +14,7 @@ void prepareIds() {
 }
 
 
-void initializeWiFi(){
+void startNetworking(){
   prepareIds();
     // Initialise wifi connection
   wifiConnected = connectWifi();
@@ -341,8 +341,11 @@ boolean connectUDP() {
 
 void turnOnRelay() {
 
+
   onEffects();
-  prog();
+  prog(true);
+
+  
 
   //  digitalWrite(relayPin, HIGH); // turn on relay with voltage HIGH
   relayState = true;
@@ -394,5 +397,6 @@ void sendRelayState() {
 
   HTTP.send(200, "text/xml", body.c_str());
 }
+
 
 

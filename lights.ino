@@ -1,4 +1,22 @@
 
+void shimmer() {
+
+  for (int i = 0; i < PixelCount; i++) {
+
+    RgbColor currentPixelColor = strip.GetPixelColor(i);
+
+    strip.SetPixelColor(i+1, RgbColor(currentPixelColor.R/3,currentPixelColor.G/3,currentPixelColor.B/3));
+    strip.SetPixelColor(i, RgbColor(currentPixelColor.R/2,currentPixelColor.G/2,currentPixelColor.B/2));
+    strip.SetPixelColor(i-1, RgbColor(currentPixelColor.R/3,currentPixelColor.G/3,currentPixelColor.B/3));
+    
+    delay(100);
+     strip.Show();
+  }
+
+  Serial.println("Shimmered");
+
+}
+
 
 void onEffects() {
 
@@ -29,9 +47,10 @@ void onEffects() {
 
 }
 
+
 void offEffects() {
 
-  for (int i = 5; i < 130; i++) {
+  for (int i = 0; i < PixelCount + 6; i++) {
     strip.SetPixelColor(i, RgbColor(244, 238, 65));
     strip.SetPixelColor(i - 1, RgbColor(255, 250, 107));
     strip.SetPixelColor(i - 2, RgbColor(255, 251, 153));
@@ -43,5 +62,7 @@ void offEffects() {
   }
 
 }
+
+
 
 
