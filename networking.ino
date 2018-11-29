@@ -341,6 +341,7 @@ boolean connectUDP() {
 
 void turnOnRelay() {
 
+  onEffects();
   prog();
 
   //  digitalWrite(relayPin, HIGH); // turn on relay with voltage HIGH
@@ -360,27 +361,9 @@ void turnOnRelay() {
 }
 
 
-
-
-void effects() {
-
-  for (int i = 5; i < 130; i++) {
-    strip.SetPixelColor(i, RgbColor(244, 238, 65));
-    strip.SetPixelColor(i - 1, RgbColor(255, 250, 107));
-    strip.SetPixelColor(i - 2, RgbColor(255, 251, 153));
-    strip.SetPixelColor(i - 3, RgbColor(255, 252, 186));
-    strip.SetPixelColor(i - 4, RgbColor(255, 252, 85));
-    strip.SetPixelColor(i - 5, hslBlack);
-    strip.Show();
-    delay(10);
-  }
-
-}
-
 void turnOffRelay() {
 
-  effects();
-  //  digitalWrite(relayPin, LOW);  // turn off relay with voltage LOW
+  offEffects();
   relayState = false;
 
   String body =

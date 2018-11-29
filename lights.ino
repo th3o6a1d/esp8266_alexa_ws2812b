@@ -1,41 +1,45 @@
 
 
-void prog() {
-  updateBikes();
-  Serial.println("Did bikes");
-  rainToday();
-  Serial.println("Got weather");
-  blinkLights();
-  Serial.println("Updated lights");
-  strip.Show();
+void onEffects() {
+
+  for (int i = 0; i < 10; i++) {
+
+    int x = random(0,120);
+    
+    strip.SetPixelColor(x, RgbColor(244, 238, 65));
+    delay(20);
+    strip.Show();
+    strip.SetPixelColor(x, RgbColor(255, 250, 107));
+    delay(20);
+    strip.Show();
+    strip.SetPixelColor(x, RgbColor(255, 251, 153));
+    delay(20);
+    strip.Show();
+    strip.SetPixelColor(x, RgbColor(255, 252, 186));
+    delay(20);
+    strip.Show();
+    strip.SetPixelColor(x, RgbColor(255, 252, 85));
+    delay(20);
+    strip.Show();
+    strip.SetPixelColor(x, hslBlack);
+    delay(20);
+    strip.Show();
+    
+  }
+
 }
 
+void offEffects() {
 
-void blinkLights() {
-
-  // Bikes
-  for (int ledIndex = 0; ledIndex < PixelCount; ledIndex ++) {
-    if ((ledIndex < num_bikes_available) && (ledIndex < 20)) {
-      strip.SetPixelColor(ledIndex, hslGreen);
-    } else {
-      strip.SetPixelColor(ledIndex, hslBlack);
-    }
-  }
-
-//  // Umbrella
-//  if (expectRain) {
-//    strip.SetPixelColor(111, hslBlue);
-//  } else {
-//    strip.SetPixelColor(111, hslWhite);
-//  }
-
-  // Temp
-  int tTotal = round(91 - temperature / 10);
-  for (int n = 80; n < tTotal; n ++) {
-    strip.SetPixelColor(n, hslBlue);
-  }
-  for (int ledIndex = tTotal; ledIndex < 91; ledIndex++) {
-    strip.SetPixelColor(ledIndex, hslRed);
+  for (int i = 5; i < 130; i++) {
+    strip.SetPixelColor(i, RgbColor(244, 238, 65));
+    strip.SetPixelColor(i - 1, RgbColor(255, 250, 107));
+    strip.SetPixelColor(i - 2, RgbColor(255, 251, 153));
+    strip.SetPixelColor(i - 3, RgbColor(255, 252, 186));
+    strip.SetPixelColor(i - 4, RgbColor(255, 252, 85));
+    strip.SetPixelColor(i - 5, hslBlack);
+    strip.Show();
+    delay(10);
   }
 
 }

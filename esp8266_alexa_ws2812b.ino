@@ -33,6 +33,7 @@ int num_bikes_disabled = 0;
 bool expectRain = false;
 float temperature = 0.0;
 unsigned long lastExecuted = 0;
+RgbColor ledArray[118];
 
 WiFiUDP UDP;
 IPAddress ipMulti(239, 255, 255, 250);
@@ -46,6 +47,19 @@ char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
 String serial;
 String persistent_uuid;
 boolean cannotConnectToWifi = false;
+
+void prog() {
+  
+  updateBikes();
+  Serial.println("Did bikes");
+  weather();
+  Serial.println("Got weather");
+  strip.Show();
+
+  for (int i = 0; i<PixelCount; i++){
+    ledArray[i] = strip.GetPixelColor(i);
+  }
+}
 
 
 void setup() {
@@ -63,7 +77,6 @@ void setup() {
 }
 
 void loop() {
-
 
   if ((millis() > lastExecuted + 60000) && (relayState)) {
     prog();
