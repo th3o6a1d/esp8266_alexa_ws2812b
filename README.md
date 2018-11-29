@@ -38,5 +38,5 @@ I broke the sketch for this project into several .ino files.
  
 - `ledproject.ino` -- Global variables, setup(), loop()
 - `api.ino` -- some WiFi API calls to update the global variables
-- `lighing.ino` -- to update the light display
-- `alexa.ino` -- makes the device discoverable by Alexa. Comes from: (https://github.com/kakopappa/arduino-esp8266-alexa-wemo-switch/blob/master/sinric.ino).
+- `lights.ino` -- to update the light display
+- `networking.ino` -- makes the device discoverable by Alexa. Comes from: (https://github.com/kakopappa/arduino-esp8266-alexa-wemo-switch/blob/master/sinric.ino).
