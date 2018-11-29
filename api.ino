@@ -55,15 +55,7 @@ void rainToday() {
       String t = line.substring(line.indexOf('temp') + 6, line.indexOf('temp') + 10);
       temperature = t.toInt() * (9 / 5) + 32;
     }
-
-    String weatherCode = "\"weather\":[{\"id\":";
-
-    Serial.println(line.substring(line.indexOf(weatherCode), line.indexOf(weatherCode) + 18));
-    if ((line.indexOf(weatherCode) > 0) && (line.substring(line.indexOf(weatherCode) + 18) == "5")) {
-      Serial.println(line);
-      expectRain = true;
-      Serial.println(expectRain);
-    }
+    
     if (line == "") {
       break;
     }

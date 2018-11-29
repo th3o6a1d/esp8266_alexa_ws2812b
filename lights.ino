@@ -22,12 +22,12 @@ void blinkLights() {
     }
   }
 
-  // Umbrella
-  if (expectRain) {
-    strip.SetPixelColor(111, hslBlue);
-  } else {
-    strip.SetPixelColor(111, hslWhite);
-  }
+//  // Umbrella
+//  if (expectRain) {
+//    strip.SetPixelColor(111, hslBlue);
+//  } else {
+//    strip.SetPixelColor(111, hslWhite);
+//  }
 
   // Temp
   int tTotal = round(91 - temperature / 10);

@@ -9,7 +9,7 @@
 
 #define colorSaturation 1
 
-const uint16_t PixelCount = 118; // this example assumes 4 pixels, making it smaller will cause a failure
+const uint16_t PixelCount = 118;
 const uint8_t PixelPin = 4;
 
 NeoPixelBus<NeoGrbFeature, NeoEsp8266Uart800KbpsMethod> strip(PixelCount, PixelPin);
