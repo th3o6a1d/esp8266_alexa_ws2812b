@@ -19,31 +19,29 @@ RgbColor blue(0, 0, colorSaturation);
 RgbColor white(colorSaturation);
 RgbColor black(0);
 RgbColor yellow(115, 119, 39);
+RgbColor orange(244, 191, 66);
 
 HslColor hslRed(red);
 HslColor hslGreen(green);
 HslColor hslBlue(blue);
 HslColor hslWhite(white);
 HslColor hslYellow(yellow);
+HslColor hslOrange(orange);
 HslColor hslBlack(black);
 
 // Bikes
 int bikesLastUpdated = 0;
-int bikesStart = 10;
-int bikesFinish = 61;
+const int bikesStart = 10;
+const int bikesFinish = 61;
 int numBikesAvailable = 0;
 int numEBikesAvailable = 0;
 int numBikesDisabled = 0;
 
 // Temperature
-int tempStart = 80;
-int tempFinish = 90;
+const int tempStart = 80;
+const int tempFinish = 90;
 float temperature = 0.0;
 int weatherLastUpdated = 0;
-
-// Light effects
-int lastShimmered = 0;
-
 
 WiFiUDP UDP;
 IPAddress ipMulti(239, 255, 255, 250);
@@ -60,22 +58,14 @@ boolean cannotConnectToWifi = false;
 
 void prog(bool startOver) {
 
-  if (startOver == true){
-    updateBikes();
-    bikesLastUpdated = millis();
-
+  if (((millis() > weatherLastUpdated + 300000) && (relayState)) || startOver) {
     updateWeather();
     weatherLastUpdated = millis();
   }
-  
-  if ((millis() > bikesLastUpdated + 60000) && (relayState)) {
+
+  if (((millis() > bikesLastUpdated + 60000) && (relayState)) || startOver){
     updateBikes();
     bikesLastUpdated = millis();
-  }
-  
-  if ((millis() > weatherLastUpdated + 300000) && (relayState)) {
-    weather();
-    weatherLastUpdated = millis();
   }
   
 }
