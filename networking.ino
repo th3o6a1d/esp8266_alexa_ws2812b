@@ -341,15 +341,6 @@ boolean connectUDP() {
 
 void turnOnRelay() {
 
-
-  onEffects();
-  prog(true);
-
-  
-
-  //  digitalWrite(relayPin, HIGH); // turn on relay with voltage HIGH
-  relayState = true;
-
   String body =
     "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body>\r\n"
     "<u:SetBinaryStateResponse xmlns:u=\"urn:Belkin:service:basicevent:1\">\r\n"
@@ -361,13 +352,16 @@ void turnOnRelay() {
 
   Serial.print("Sending :");
   Serial.println(body);
+
+  onEffects();
+  
+  prog(true);
+  relayState = true;
+
 }
 
 
 void turnOffRelay() {
-
-  offEffects();
-  relayState = false;
 
   String body =
     "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body>\r\n"
@@ -380,6 +374,11 @@ void turnOffRelay() {
 
   Serial.print("Sending :");
   Serial.println(body);
+
+  offEffects();
+  relayState = false;
+
+
 }
 
 void sendRelayState() {
