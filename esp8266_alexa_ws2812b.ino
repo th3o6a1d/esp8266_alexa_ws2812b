@@ -18,7 +18,7 @@ RgbColor green(0, colorSaturation, 0);
 RgbColor blue(0, 0, colorSaturation);
 RgbColor white(colorSaturation);
 RgbColor black(0);
-RgbColor yellow(115, 119, 39);
+RgbColor yellow(3, 3, 1);
 RgbColor orange(244, 191, 66);
 
 HslColor hslRed(red);

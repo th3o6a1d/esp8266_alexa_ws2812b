@@ -3,6 +3,8 @@
 
 void updateBikes() {
 
+  strip.SetPixelColor(bikesStart - 3, hslYellow);
+
   // Display the broken bikes
   for (int i = bikesStart; i < bikesFinish; i ++) {
     if (i < bikesStart + numBikesDisabled) {
@@ -111,12 +113,15 @@ void updateBikes() {
       strip.SetPixelColor(i, hslBlack);
     }
   }
+
+  strip.SetPixelColor(bikesStart - 3, hslBlack);
   strip.Show();
 }
 
 
 void updateWeather() {
 
+  strip.SetPixelColor(tempStart + 13, hslYellow);
   // Update LEDs
   int tTotal = round(tempFinish - temperature / 10);
   for (int n = tempStart; n < tTotal; n ++) {
@@ -156,6 +161,8 @@ void updateWeather() {
   for (int i = tTotal; i < tempFinish; i++) {
     strip.SetPixelColor(i, hslRed);
   }
+
+  strip.SetPixelColor(tempStart + 13, hslBlack);
   strip.Show();
 }
 
