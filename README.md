@@ -28,7 +28,7 @@
 
 ## Wiring
 
-The LED lights have a signil wire (green), power (red), and ground (white). Connect ground to a GND on ESP8266 opposite side from connected red to a 3.3V input. 
+The LED lights have a signil wire (green), power (red), and ground (white). Connect ground to a GND on ESP8266 opposite side from connected red to Vin input.
 
 ## Code
 

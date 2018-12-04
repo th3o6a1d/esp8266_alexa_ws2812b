@@ -36,8 +36,11 @@ void updateBikes() {
   const char* host = "gbfs.citibikenyc.com";
   const String url = "/gbfs/en/station_status.json";
   const uint16_t port = 80;
+//  const char fingerprint = E6:8D:15:A0:C3:FD:67:F7:B2:DF:69:93:6C:80:A8:50:0C:85:EE:9A;
 
+  int timer = millis();
   WiFiClient client;
+  
   client.connect(host, port);
   client.print("GET " + url + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" +
@@ -47,6 +50,9 @@ void updateBikes() {
 
   String preJSON = "";
   while (client.connected()) {
+    if (millis() > timer + 10000) {
+      return;
+    }
     preJSON = client.readStringUntil('}');
     if (preJSON.indexOf("\"station_id\":\"422\"") > 0) {
       preJSON.remove(0, 1);
@@ -153,6 +159,27 @@ void updateWeather() {
   }
   client.stop();
 
+//    String url = "https://api.darksky.net/forecast/81f45ef479b576bbc7272c90c097738b/40.7128,-74.0060";
+//  HTTPClient http;  //Declare an object of class HTTPClient
+//  http.begin(url);  //Specify request destination
+//  int httpCode = http.GET();                                                                  //Send the request
+//
+//  if (httpCode > 0) { //Check the returning code
+//
+//    String payload = http.getString();   //Get the request response payload
+//    Serial.println(payload);                     //Print the response payload
+//    const size_t bufferSize = JSON_ARRAY_SIZE(8) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(6) + JSON_OBJECT_SIZE(19) + 2 * JSON_OBJECT_SIZE(38) + 4 * JSON_OBJECT_SIZE(39) + 2 * JSON_OBJECT_SIZE(40) + 8790;
+//    DynamicJsonBuffer jsonBuffer(bufferSize);
+//    JsonObject& root = jsonBuffer.parseObject(payload);
+//    JsonObject& currently = root["currently"];
+//    float currently_temperature = currently["temperature"]; // 51.94
+//    JsonObject& daily = root["daily"];
+//    JsonArray& daily_data = daily["data"];
+//    JsonObject& daily_data0 = daily_data[0];
+//    float daily_data0_precipProbability = daily_data0["precipProbability"]; // 0.98
+//
+//    temperature = currently_temperature;
+
   // Update LEDs
   tTotal = round(tempFinish - temperature / 10);
   for (int n = tempStart; n < tTotal; n ++) {
@@ -165,6 +192,7 @@ void updateWeather() {
   strip.SetPixelColor(tempStart + 13, hslBlack);
   strip.Show();
 }
+
 
 
 

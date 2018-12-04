@@ -139,6 +139,18 @@ void startHttpServer() {
     HTTP.send(200, "text/plain", "Hello World!");
   });
 
+  HTTP.on("/color", HTTP_POST, []() {
+    if ((HTTP.hasArg("r")== false) || (HTTP.hasArg("g")== false) || (HTTP.hasArg("b")== false)){ //Check if body received
+      HTTP.send(200, "text/plain", "Body not received");
+    } else {
+      int r = HTTP.arg("r").toInt();
+      int g = HTTP.arg("g").toInt();
+      int b = HTTP.arg("b").toInt();
+      HTTP.send(200, "text/plain", HTTP.arg("r") + "," + HTTP.arg("g") + "," + HTTP.arg("b"));
+      setColor(r,g,b);
+    }
+  });
+
   HTTP.on("/upnp/control/basicevent1", HTTP_POST, []() {
     Serial.println("########## Responding to  /upnp/control/basicevent1 ... ##########");
 
@@ -396,6 +408,7 @@ void sendRelayState() {
 
   HTTP.send(200, "text/xml", body.c_str());
 }
+
 
 
 

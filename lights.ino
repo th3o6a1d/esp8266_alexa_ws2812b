@@ -1,11 +1,29 @@
-
+void setColor(int r, int g, int b) {
+  if ((r == 0) && (g == 0) && (b == 0)) {
+    strip.ClearTo(hslBlack);
+    colorMode = false;
+    prog(true);
+  } else {
+    RgbColor c(r, g, b);
+    HslColor color(c);
+    for (int i = 0; i < PixelCount; i++) {
+      if (i % 3 == 0) {
+        strip.SetPixelColor(i, color);
+      } else {
+        strip.SetPixelColor(i, hslBlack);
+      }
+    }
+    colorMode = true;
+  }
+  strip.Show();
+}
 
 void onEffects() {
 
   for (int i = 0; i < 10; i++) {
 
-    int x = random(0,PixelCount);
-    
+    int x = random(0, PixelCount);
+
     strip.SetPixelColor(x, RgbColor(244, 238, 65));
     delay(20);
     strip.Show();
@@ -24,7 +42,7 @@ void onEffects() {
     strip.SetPixelColor(x, hslBlack);
     delay(20);
     strip.Show();
-    
+
   }
 
   strip.ClearTo(hslBlack);
@@ -49,6 +67,7 @@ void offEffects() {
   strip.Show();
 
 }
+
 
 
 

@@ -11,6 +11,8 @@
 const uint16_t PixelCount = 118;
 const uint8_t PixelPin = 4;
 
+bool colorMode = false;
+
 NeoPixelBus<NeoGrbFeature, NeoEsp8266Uart800KbpsMethod> strip(PixelCount, PixelPin);
 
 RgbColor red(colorSaturation, 0, 0);
@@ -47,27 +49,36 @@ WiFiUDP UDP;
 IPAddress ipMulti(239, 255, 255, 250);
 ESP8266WebServer HTTP(80);
 boolean udpConnected = false;
-unsigned int portMulti = 1900;      
-unsigned int localPort = 1900;      
+unsigned int portMulti = 1900;
+unsigned int localPort = 1900;
 boolean wifiConnected = false;
-boolean relayState = false;
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; 
+boolean relayState = true;
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
 String serial;
 String persistent_uuid;
 boolean cannotConnectToWifi = false;
 
 void prog(bool startOver) {
 
-  if (((millis() > weatherLastUpdated + 300000) && (relayState)) || startOver) {
-    updateWeather();
-    weatherLastUpdated = millis();
+  if (startOver) {
+    strip.ClearTo(hslBlack);
+    colorMode = false;
+    strip.Show();
   }
 
-  if (((millis() > bikesLastUpdated + 60000) && (relayState)) || startOver){
-    updateBikes();
-    bikesLastUpdated = millis();
+  if (!(colorMode)) {
+    if (((millis() > weatherLastUpdated + 300000) && (relayState)) || startOver) {
+      updateWeather();
+      weatherLastUpdated = millis();
+    }
+
+    if (((millis() > bikesLastUpdated + 60000) && (relayState)) || startOver) {
+      updateBikes();
+      bikesLastUpdated = millis();
+    }
   }
-  
+
+
 }
 
 
@@ -84,6 +95,7 @@ void loop() {
   HTTP.handleClient();
   runServer();
 }
+
 
 
 
